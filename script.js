@@ -9,18 +9,6 @@ const FEES = {
 // Based on Sheet3
 const STAMP_DUTY_RATES = [
     { threshold: 1455000, base: 0, rate: 4.54 }, // Special case for high value? Logic in Excel was complex, using XLOOKUP.
-    // Let's re-examine the Excel logic for Stamp Duty.
-    // Excel Formula: ((((B2+1)-XLOOKUP(...))/100) * XLOOKUP(...)) + XLOOKUP(...)
-    // It looks like a standard progressive tax or tiered bracket, but the table in Sheet3 is:
-    // 0 -> 0 base, 1.2 rate
-    // 200001 -> 2400 base, 2.2 rate
-    // 300001 -> 4600 base, 3.4 rate
-    // 500001 -> 11400 base, 4.32 rate
-    // 750001 -> 22200 base, 5.9 rate
-    // 1000001 -> 36950 base, 6.4 rate
-    // 1455000 -> 0 base, 4.54 rate (This seems to be a flat rate or override?)
-
-    // Let's implement based on the table structure found in Sheet3
     { threshold: 1000001, base: 36950, rate: 6.4 },
     { threshold: 750001, base: 22200, rate: 5.9 },
     { threshold: 500001, base: 11400, rate: 4.32 },
@@ -52,47 +40,21 @@ const LMI_DATA = [
 ];
 
 function calculateStampDuty(propertyValue) {
-    // Special case from Excel Sheet3: If > 1,455,000, rate is 4.54% flat?
-    // The Excel logic was:
-    // ((((B2+1)-XLOOKUP(...))/100) * XLOOKUP(...)) + XLOOKUP(...)
-    // This implies a progressive calculation for the bracket it falls into.
-
-    // However, the last entry in Sheet3 is 1,455,000 with Base 0 and Rate 4.54.
-    // This usually implies a flat rate for the entire amount if it exceeds this, OR a different calculation.
-    // Given the "Base 0", it likely means: if > 1455000, Duty = Value * 4.54%
 
     if (propertyValue > 1455000) {
         return propertyValue * (4.54 / 100);
     }
 
-    // Find the bracket
-    // The table is sorted ascending in the sheet, but I sorted descending in JS for easier 'find'.
-    // Actually, let's stick to the logic: Find the highest threshold <= propertyValue.
-
     // Re-sorting to match logic: find the largest threshold that is <= value
     const bracket = STAMP_DUTY_RATES.find(tier => propertyValue >= tier.threshold && tier.threshold !== 1455000);
 
-    if (!bracket) return 0; // Should not happen given 0 threshold
-
-    // Calculation: Base + ((Value - Threshold) * Rate / 100)
-    // Note: The Excel formula used (B2+1) in the lookup, which is weird, but standard is (Value - Threshold).
-    // Let's assume standard progressive tax logic.
-    // Wait, the Excel formula was:
-    // ((((B2+1)-Threshold)/100) * Rate) + Base
-    // The (B2+1) might be to handle boundary conditions or just an Excel quirk.
-    // We will use (Value - Threshold).
+    if (!bracket) return 0;
 
     return bracket.base + ((propertyValue - bracket.threshold) * (bracket.rate / 100));
 }
 
 function calculateLMI(lvr, loanAmount) {
     if (lvr <= 80) return 0;
-
-    // Find LVR tier
-    // The table has 80.01, 81.01 etc.
-    // We need to find the row where lvr matches or is slightly less?
-    // Excel uses XMATCH with -1 (exact match or next smaller item).
-    // So if LVR is 80.5, it matches 80.01.
 
     const lvrRow = LMI_DATA.slice().reverse().find(row => lvr >= row.lvr);
     if (!lvrRow) return 0; // LVR too high (above max) or logic error? 
@@ -162,20 +124,12 @@ function updateCalculator() {
     const totalFees = stampDuty + FEES.REGISTRATION + FEES.TRANSFER + FEES.OTHER;
 
     // 3. Calculate Base Loan
-    // Base Loan = (Property Value - Deposit) + Fees
-    // Wait, usually you pay fees upfront or capitalize them.
-    // The Excel formula for Base Loan (B5) was: (B2-C3)+B12+B9+B10+B11
-    // (Property Value - Deposit Amount) + StampDuty + Reg + Transfer + Other
-    // So fees are capitalized into the loan.
     let baseLoan = (propertyValue - depositAmount) + totalFees;
 
     // 4. Calculate LVR
     const lvr = (baseLoan / propertyValue) * 100;
 
     // 5. Calculate LMI
-    // LMI is based on Base Loan amount?
-    // Excel: INDEX(LMI!..., MATCH(LVR...), MATCH(BaseLoan...))
-    // Yes, uses Base Loan.
     const lmiCost = calculateLMI(lvr, baseLoan);
 
     // 6. Total Loan
@@ -358,30 +312,6 @@ function updateTermAnalysis(totalLoan, monthlyRepayment, annualHoldingCosts, wee
     let cumulativePrincipal = 0;
     let cumulativeInterest = 0;
     let breakEvenYear = null;
-
-    // Initial Cash Position (Negative): Deposit + Stamp Duty + LMI + Other Fees
-    // Note: If fees are capitalized (added to loan), they are not out of pocket upfront, 
-    // but usually Deposit + Stamp Duty are upfront.
-    // Let's assume Deposit + Stamp Duty + Other Fees are upfront costs. LMI is usually capitalized.
-    // If LMI is capitalized, it's part of the loan, not upfront cash.
-    // Base Loan calculation in updateCalculator: (Prop - Deposit) + Fees.
-    // So Fees ARE capitalized in this logic.
-    // Thus, upfront cash = Deposit Amount.
-    // Wait, Stamp Duty is usually paid upfront.
-    // Let's assume upfront = Deposit + Stamp Duty + Fees (if not capitalized).
-    // But the calculator adds fees to loan. So upfront is just Deposit?
-    // Let's stick to Deposit for now, or maybe Deposit + Stamp Duty if that's standard.
-    // Actually, let's track "Net Cashflow" accumulation.
-    // Year 0 = -(Deposit + Stamp Duty + Fees). Even if capitalized, it's debt, but we are tracking CASH position.
-    // If fees are capitalized, you didn't pay them cash. You paid Deposit.
-    // So Initial Cash = -Deposit.
-    // BUT, usually you have to pay Stamp Duty cash. Banks rarely lend 100% of Stamp Duty + LVR > 95%.
-    // Let's assume Initial Cash = -(Deposit + Stamp Duty + Fees).
-    // If they are capitalized, the loan is higher, so interest is higher, which is captured in repayments.
-    // If we assume they are paid cash, then loan is smaller.
-    // The current logic adds fees to loan. So they are NOT paid cash.
-    // So Initial Cash Position = -Deposit.
-
     let currentCumulativeCash = -1 * (propertyValue * (parseFloat(document.getElementById('depositPercent').value) || 0) / 100);
 
     for (let y = 1; y <= years; y++) {
