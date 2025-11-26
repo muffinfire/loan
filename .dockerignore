@@ -1,0 +1,7 @@
+scrape/
+temp_excel/
+.git/
+LoanCalc.xlsx
+node_modules/
+.DS_Store
+.gemini/

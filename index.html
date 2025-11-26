@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:;">
+    <title>Premium Loan Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Loan Calculator</h1>
+            <p>Estimate your repayments and investment costs.</p>
+        </header>
+
+        <main class="calculator-grid">
+            <section class="input-section card">
+                <h2>Loan Details</h2>
+
+                <div class="input-group">
+                    <label for="propertyValue">Property Value</label>
+                    <div class="input-wrapper">
+                        <span class="prefix">$</span>
+                        <input type="number" id="propertyValue" value="500000" min="0">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="depositPercent">Deposit %</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="depositPercent" value="25" min="0" max="100" step="0.1">
+                        <span class="suffix">%</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="interestRate">Interest Rate</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="interestRate" value="5.6" min="0" step="0.01">
+                        <span class="suffix">%</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="loanTerm">Loan Term</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="loanTerm" value="25" min="1" max="50">
+                        <span class="suffix">Years</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="results-section card">
+                <h2>Repayment Summary</h2>
+
+                <div class="main-result">
+                    <span class="label">Monthly Repayment</span>
+                    <span class="value" id="monthlyRepayment">$0.00</span>
+                </div>
+
+                <div class="secondary-results">
+                    <div class="result-item">
+                        <span class="label">Weekly</span>
+                        <span class="value" id="weeklyRepayment">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Annually</span>
+                        <span class="value" id="annualRepayment">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Cost Breakdown</h3>
+                    <div class="breakdown-item">
+                        <span>Deposit Amount</span>
+                        <span id="depositAmountDisplay">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Stamp Duty (ACT)</span>
+                        <span id="stampDuty">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Transfer Fee</span>
+                        <span id="transferFee">$463.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Registration Fee</span>
+                        <span id="regFee">$172.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Other Fees</span>
+                        <span id="otherFees">$1,500.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>LVR</span>
+                        <span id="lvrValue">0.00%</span>
+                    </div>
+                    <div class="breakdown-item highlight">
+                        <span>LMI (Lenders Mortgage Insurance)</span>
+                        <span id="lmiCost">$0.00</span>
+                    </div>
+                    <div class="breakdown-item total-loan">
+                        <span>Total Loan Amount</span>
+                        <span id="totalLoanAmount">$0.00</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="investment-section card">
+                <h2>Investment Analysis</h2>
+
+                <div class="input-group">
+                    <h3>Annual Holding Costs</h3>
+                    <div class="cost-grid">
+                        <div class="input-wrapper-sm">
+                            <label>Council Rates</label>
+                            <div class="input-wrapper">
+                                <span class="prefix">$</span>
+                                <input type="number" id="councilRates" value="2000" min="0">
+                            </div>
+                        </div>
+                        <div class="input-wrapper-sm">
+                            <label>Strata Fees</label>
+                            <div class="input-wrapper">
+                                <span class="prefix">$</span>
+                                <input type="number" id="strataFees" value="7500" min="0">
+                            </div>
+                        </div>
+                        <div class="input-wrapper-sm">
+                            <label>Land Tax</label>
+                            <div class="input-wrapper">
+                                <span class="prefix">$</span>
+                                <input type="number" id="landTax" value="2500" min="0">
+                            </div>
+                        </div>
+                        <div class="input-wrapper-sm">
+                            <label>Sinking Fund</label>
+                            <div class="input-wrapper">
+                                <span class="prefix">$</span>
+                                <input type="number" id="sinkingFund" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="input-wrapper-sm">
+                            <label>Other Costs</label>
+                            <div class="input-wrapper">
+                                <span class="prefix">$</span>
+                                <input type="number" id="otherInvestmentCosts" value="2500" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="targetRent">Target Weekly Rent</label>
+                    <div class="rent-control">
+                        <input type="range" id="targetRentSlider" min="200" max="2000" step="10" value="500">
+                        <div class="input-wrapper" style="width: 120px;">
+                            <span class="prefix">$</span>
+                            <input type="number" id="targetRentInput" value="500" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="investment-results">
+                    <div class="result-card">
+                        <span class="label">Total Monthly Costs</span>
+                        <span class="value" id="totalMonthlyCosts">$0.00</span>
+                        <span class="sub-label">Weekly: <span id="totalWeeklyCosts">$0.00</span></span>
+                    </div>
+                    <div class="result-card highlight">
+                        <span class="label">Net Monthly Position</span>
+                        <span class="value" id="netMonthlyPosition">$0.00</span>
+                        <span class="sub-label">Weekly: <span id="netWeeklyPosition">$0.00</span></span>
+                    </div>
+                    <div class="result-card">
+                        <span class="label">Break-even Rent</span>
+                        <span class="value" id="breakEvenRent">$0.00</span>
+                        <span class="sub-label">Weekly</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="rentAnalysisChart"></canvas>
+                </div>
+            </section>
+
+            <section class="term-section card">
+                <div class="section-header-row">
+                    <h2>Long Term View (Full Term)</h2>
+                    <div class="toggle-container">
+                        <div class="view-controls">
+                            <button class="view-btn active" data-view="annual">Annual</button>
+                            <button class="view-btn" data-view="monthly">Monthly</button>
+                            <button class="view-btn" data-view="weekly">Weekly</button>
+                        </div>
+                        <div class="toggle-wrapper">
+                            <label class="switch">
+                                <input type="checkbox" id="inflationToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="toggle-label">Enable Inflation & Growth</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="projections-inputs" id="projectionsInputs">
+                    <div class="input-group">
+                        <label for="capitalGrowth">Capital Growth (%)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="capitalGrowth" value="3.5" step="0.1">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="inflationRate">CPI / Inflation (%)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="inflationRate" value="2.5" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-grid">
+                    <div class="term-metric">
+                        <span class="label">Total Repayments</span>
+                        <span class="value" id="totalRepayments">$0.00</span>
+                    </div>
+                    <div class="term-metric">
+                        <span class="label">Total Interest</span>
+                        <span class="value" id="totalInterestPaid">$0.00</span>
+                    </div>
+                    <div class="term-metric">
+                        <span class="label">Total Holding Costs</span>
+                        <span class="value" id="totalHoldingCosts">$0.00</span>
+                    </div>
+                    <div class="term-metric">
+                        <span class="label">Total Rental Income</span>
+                        <span class="value" id="totalRentalIncome">$0.00</span>
+                    </div>
+                    <div class="term-metric highlight">
+                        <span class="label">Net Cashflow</span>
+                        <span class="value" id="netTermCashflow">$0.00</span>
+                    </div>
+                    <div class="term-metric full-width-metric">
+                        <span class="label">Break Even Year</span>
+                        <span class="value" id="breakEvenYear">-</span>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-wrapper">
+                        <h3>Total Costs Breakdown</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="termCostsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Income vs Costs</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="termCashflowChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-wrapper">
+                        <h3>Amortization (Principal vs Interest)</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="amortizationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Equity Growth (Projected)</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="equityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-row-full">
+                    <div class="chart-wrapper detailed-chart">
+                        <h3>Net Cashflow Projection</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="netCashflowChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-row-full">
+                    <div class="chart-wrapper detailed-chart">
+                        <h3>Detailed Holding Costs (Inflated)</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="holdingCostsBreakdownChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-wrapper detailed-chart">
+                        <h3>Cashflow Comparison (Income vs Outgoings)</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="cashflowComparisonChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper detailed-chart">
+                        <h3>Investment Return (Cash vs Total)</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="cumulativeCashflowChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Projected Holding Costs</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="holdingCostsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Projected Rental Income</h3>
+                        <div class="chart-container-sm">
+                            <canvas id="rentalIncomeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"
+        integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
+        crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
