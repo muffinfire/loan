@@ -28,6 +28,15 @@ body {
     justify-content: center;
     align-items: center;
     padding: 2rem;
+    /* Aggressive Reset */
+    width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+html {
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .container {
@@ -324,6 +333,62 @@ h2 {
 
     .main-result .value {
         font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0.5rem;
+        align-items: flex-start;
+        /* Allow scrolling from top */
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Force Single Column Everywhere */
+    .calculator-grid,
+    .cost-grid,
+    .term-grid,
+    .investment-results,
+    .charts-row,
+    .projections-inputs,
+    .secondary-results {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    /* Adjust Font Sizes */
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .main-result .value {
+        font-size: 2rem;
+    }
+
+    /* Card Padding */
+    .card {
+        padding: 1rem;
+    }
+
+    /* Ensure Inputs Fit */
+    input,
+    select,
+    button {
+        max-width: 100%;
+    }
+
+    /* View Controls Stack */
+    .view-controls {
+        flex-direction: column;
+    }
+
+    .view-btn {
+        width: 100%;
+        margin-bottom: 2px;
     }
 }
 
