@@ -217,12 +217,128 @@ h2 {
 }
 
 @media (max-width: 768px) {
+    body {
+        padding: 1rem 0.5rem;
+    }
+
+    .container {
+        width: 100%;
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
+    }
+
+    header h1 {
+        font-size: 1.75rem;
+    }
+
     .calculator-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+
+    /* Input adjustments */
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    /* Rent control specific */
+    .rent-control {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .rent-input-wrapper {
+        width: 100%;
+        max-width: none;
+    }
+
+    /* Term section adjustments */
+    .section-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .toggle-container {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .view-controls {
+        margin-right: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        /* Distribute buttons evenly */
+    }
+
+    .view-btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px 4px;
+        /* Smaller padding */
+        font-size: 0.85rem;
+    }
+
+    .toggle-wrapper {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+    }
+
+    /* Projections inputs */
+    .projections-inputs {
         grid-template-columns: 1fr;
     }
 
-    body {
-        padding: 1rem;
+    /* Charts row */
+    .charts-row {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Full width metric */
+    .full-width-metric {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .full-width-metric .label {
+        margin-bottom: 0.25rem;
+    }
+
+    /* Results section */
+    .secondary-results {
+        gap: 0.75rem;
+    }
+
+    .main-result .value {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .view-controls {
+        flex-direction: column;
+        /* Stack buttons on very small screens if needed, or keep row */
+    }
+
+    .cost-grid,
+    .term-grid {
+        grid-template-columns: 1fr 1fr;
+        /* Force 2 columns on small screens instead of 1 big one if possible, or 1fr for very small */
     }
 }
 
