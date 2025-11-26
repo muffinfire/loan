@@ -233,11 +233,13 @@ h2 {
 
     .calculator-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
+        /* Reduced gap */
     }
 
     .card {
-        padding: 1.25rem;
+        padding: 1rem;
+        /* Reduced padding */
     }
 
     /* Input adjustments */
@@ -340,6 +342,11 @@ h2 {
         grid-template-columns: 1fr 1fr;
         /* Force 2 columns on small screens instead of 1 big one if possible, or 1fr for very small */
     }
+
+    /* Ensure very small screens don't break layout */
+    .investment-results {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Investment Section */
@@ -350,7 +357,8 @@ h2 {
 
 .cost-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    /* Reduced min width */
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
@@ -374,8 +382,9 @@ h2 {
 
 .investment-results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    /* Reduced min width */
+    gap: 1rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
@@ -427,7 +436,8 @@ h2 {
 
 .term-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    /* Reduced min width */
     gap: 1rem;
     margin-bottom: 2rem;
 }
